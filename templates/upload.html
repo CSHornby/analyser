@@ -1,0 +1,9 @@
+{{define "content"}}
+<h1>Results</h1>
+{{range $key, $value := .}}<p>{{$key}} - {{$value}}</p>{{end}}
+<div style="margin-top: 2rem; text-align: center;">
+	<a href="/" class="file-label" style="text-decoration: none; display: inline-block;">
+		← Upload another
+	</a>
+</div>
+{{end}}

@@ -1,0 +1,24 @@
+{{define "content"}}
+<h1>Credit card statement analyser</h1>
+<form action="/upload" method="post" enctype="multipart/form-data">
+	<div class="upload-section">
+	<p>Upload a CSV: Second column is the entry, third is the amount</p>
+		<label for="file" class="file-label">
+			Choose File
+		</label>
+		<input type="file" id="file" name="file" accept=".txt,.csv,.json,.xml,.log" required>
+		<div class="file-info" id="fileInfo">
+			<strong>Selected file:</strong> <span id="fileName"></span>
+		</div>
+		<br>
+		<button type="submit" class="submit-btn" id="submitBtn" disabled>
+			Upload and Analyse
+		</button>
+		{{if .}}
+		<div class="error-message">
+			{{.}}
+		</div>
+		{{end}}
+	</div>
+</form>
+{{end}}
