@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"html/template"
-	"log"
 	"main/services"
 	"net/http"
 
@@ -20,9 +19,7 @@ type UploadHandler struct {
 func (u UploadHandler) Process(w http.ResponseWriter, r *http.Request) {
 	var records [][]string
 	file, fileHeader, err := r.FormFile("file")
-	log.Println(fileHeader)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, "Failed to get file from form", http.StatusBadRequest)
 		return
 	}

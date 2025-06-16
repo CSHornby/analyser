@@ -3,7 +3,6 @@ package services
 import (
 	"encoding/csv"
 	"io"
-	"log"
 )
 
 type ExtractCsv struct {
@@ -18,7 +17,6 @@ func (e ExtractCsv) Extract(file io.Reader) (records [][]string, err error) {
 
 	records, err = r.ReadAll()
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 

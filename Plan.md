@@ -10,4 +10,4 @@
 * Add dashboard to show overall spending by category
 
 ### Technical improvements
-* Refactor handler into middlewares for easier testing
+* Refactor upload handler into middlewares for easier testing
