@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"html/template"
+	"log"
 	"main/services"
 	"net/http"
 
@@ -19,7 +20,9 @@ type UploadHandler struct {
 func (u UploadHandler) Process(w http.ResponseWriter, r *http.Request) {
 	var records [][]string
 	file, fileHeader, err := r.FormFile("file")
+	log.Println(fileHeader)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, "Failed to get file from form", http.StatusBadRequest)
 		return
 	}
@@ -27,18 +30,30 @@ func (u UploadHandler) Process(w http.ResponseWriter, r *http.Request) {
 
 	switch fileHeader.Header.Get("Content-Type") {
 	case "text/csv":
-		records, _ = u.CsvService.Extract(file)
+		records, err = u.CsvService.Extract(file)
+		if err != nil {
+			flashAndRedirect(u, w, r)
+			return
+		}
 	default:
-		sess, _ := u.Session.Get(r, "analyse-session")
-		sess.AddFlash("Unsupported file type. Please upload a CSV file.", "error")
-		sess.Save(r, w) // Save session after adding flash message
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		flashAndRedirect(u, w, r)
 		return
 	}
 
 	cleaned, err := u.Clean.Clean(records)
+	if err != nil {
+		flashAndRedirect(u, w, r)
+		return
+	}
 
-	categories, err := u.Analyser.Analyse(cleaned)
+	categories := u.Analyser.Analyse(cleaned)
 
 	u.Temp.Execute(w, categories)
+}
+
+func flashAndRedirect(u UploadHandler, w http.ResponseWriter, r *http.Request) {
+	sess, _ := u.Session.Get(r, "analyse-session")
+	sess.AddFlash("Unsupported file type. Please upload a CSV file.", "error")
+	sess.Save(r, w) // Save session after adding flash message
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

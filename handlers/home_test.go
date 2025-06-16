@@ -25,7 +25,7 @@ func TestHomeProcess(t *testing.T) {
 }
 
 func TestHomeProcessFlash(t *testing.T) {
-	req, err := http.NewRequest("GET", "/", nil)
+	req, err := http.NewRequest(http.MethodGet, "/", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
