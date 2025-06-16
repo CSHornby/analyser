@@ -6,6 +6,7 @@ import (
 	"main/handlers"
 	"main/services"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -13,7 +14,7 @@ import (
 )
 
 func main() {
-	store := sessions.NewCookieStore([]byte("never-store-the-key-like-this-:)"))
+	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
 	temp, err := template.ParseFiles("templates/layout.html", "templates/upload.html")
 	if err != nil {
 		log.Fatal(err.Error())
@@ -33,7 +34,7 @@ func main() {
 
 	srv := &http.Server{
 		Handler: r,
-		Addr:    "127.0.0.1:8001",
+		// Addr:    "127.0.0.1:8001",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
