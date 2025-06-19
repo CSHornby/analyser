@@ -1,0 +1,12 @@
+services:
+  analyser:
+    build: .
+    working_dir: /app
+    expose:
+      - 80
+    ports:
+      - 8000:80
+    environment:
+      - SESSION_KEY=107a5e1f-44e5-48d8-87aa-a101418ff75c
+    volumes:
+      - ./.:/app
